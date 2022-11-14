@@ -1,6 +1,6 @@
 
+from math import sqrt
 from point import Point
-
 
 class Polygon:
 
@@ -17,8 +17,8 @@ class Polygon:
         else:
             raise TypeError('Polygon needs a tuple or list as argument')
     
-    def __get_vertexes(self):
-        return tuple(self.__vertex)
+    # def __get_vertexes(self):
+    #     return tuple(self.__vertex)
 
     def __repr__(self):
         # result = 'Polygon<'
@@ -27,10 +27,10 @@ class Polygon:
         # return result[:-2] + '>'
         return 'Polygon<' + ', '.join(map(str, self.__vertex)) + '>'
 
-        
-    vertexes = property(fget=__get_vertexes, doc='Polygon vertexes')
 
-    def equal(self, pol):
+    vertexes = property(fget=lambda self: tuple(self.__vertex), doc='Polygon vertexes')
+
+    def __eq__(self, pol):
         if len(self.__vertex) != len(pol.__vertex):
             return False
 
@@ -39,6 +39,21 @@ class Polygon:
                 return False
         return True
         # return set(self.__vertex) == set(pol.__vertex)
+
+    def show(self, prompt=''):
+        print(prompt, end='')
+        print(self)
+
+    def clone(self):
+        return Polygon(self)
+
+    def perimeter(self):
+        p = 0.0
+        vertex = self.__vertex
+        for i in range(len(vertex) - 1):
+            p += sqrt((vertex[i].x - vertex[i + 1].x)**2 + (vertex[i].y - vertex[i + 1].y)**2)
+        return p 
+
 
 
 a = Point(2,4)
@@ -60,3 +75,8 @@ v = t.vertexes
 print('vertex(t):', v)
 print()
 print('t:', t)
+
+t.show()
+t.show('T:')
+
+print('p=',t.perimeter())
