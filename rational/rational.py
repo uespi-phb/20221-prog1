@@ -1,6 +1,6 @@
 
 class Rational:
-
+  
     def __init__(self, num, den = None):
         self.__num, self.__den = self.__validate_params(num, den)
 
@@ -32,12 +32,17 @@ class Rational:
 
         return Rational(n, 1) if isinstance(n, int) else n
 
+
     def __repr__(self):
-        return f'Rational({self.__num}/{self.__den})'
+        return f'Rational({self.__num},{self.__den})'
 
 
     def __str__(self):
         return f'{self.__num}/{self.__den}'
+
+
+    def __hash__(self):
+        return hash((self.__num, self.__den))
 
 
     def __add__(self, r):
@@ -47,8 +52,10 @@ class Rational:
                     self.__den * r.__den 
                )
 
-    def __radd(self, r):
-        return self + r
+
+    def __radd__(self, r):
+        return self.__add__(r)
+
 
     def __sub__(self, r):
         r = self.__validate_operand(r)
@@ -57,8 +64,9 @@ class Rational:
                     self.__den * r.__den 
                )
 
+
     def __rsub(self, r):
-        return self - r
+        return self.__sub__(r)
 
 
     def __mul__(self, r):
@@ -69,7 +77,8 @@ class Rational:
                )
 
     def __rmul__(self, r):
-        return self * r
+        return self.__mul__(r)
+
 
     def __div__(self, r):
         r = self.__validate_operand(r)
@@ -79,7 +88,7 @@ class Rational:
                )
 
     def __rdiv__(self, r):
-        return self / r
+        return self.__div(r)
 
 
     def __pos__(self):
@@ -88,6 +97,36 @@ class Rational:
 
     def __neg__(self):
         return Rational(-self.__num, self.__den)
+
+
+    def __cmp(self, r):
+        r = self.__validate_operand(r)
+        result = (self.__num / self.__den) - (r.__num / r.__den)
+        return 0 if result == 0 else (-1 if result < 0 else 1)
+
+
+    def __eq__(self, r):
+        return self.__cmp(r) == 0
+
+
+    def __ne__(self, r):
+        return self.__cmp(r) != 0
+
+
+    def __gt__(self, r):
+        return self.__cmp(r) > 0
+
+
+    def __lt__(self, r):
+        return self.__cmp(r) < 0
+
+
+    def __ge__(self, r):
+        return self.__cmp(r) >= 0
+
+
+    def __le__(self, r):
+        return self.__cmp(r) <= 0
 
 
     def reduce(self):
@@ -103,24 +142,3 @@ class Rational:
 
         self.__num = num
         self.__den = den
-
-
-
-def main():
-
-    rationals = list()
-
-    rationals.append(Rational(5,3))
-    rationals.append(Rational(-5,3))
-    rationals.append(Rational(5,-3))
-    rationals.append(Rational(-5,-3))
-    rationals.append(Rational(rationals[0]))
-    rationals.append(Rational('9/5'))
-
-    for r in rationals:
-        print(r)
-
-
-
-if __name__ == '__main__':
-    main()
