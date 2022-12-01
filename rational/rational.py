@@ -80,15 +80,16 @@ class Rational:
         return self.__mul__(r)
 
 
-    def __div__(self, r):
+    def __truediv__(self, r):
         r = self.__validate_operand(r)
         return Rational(
                     self.__num * r.__den,
                     self.__den * r.__num 
                )
 
-    def __rdiv__(self, r):
-        return self.__div(r)
+    def __rtruediv__(self, r):
+        r = self.__validate_operand(r)
+        return r.__truediv__(self)
 
 
     def __pos__(self):
